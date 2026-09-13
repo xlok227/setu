@@ -21,6 +21,7 @@ Setu connects students with industry internships using **explainable, skill-base
     data/db.js             Mongo connection helper
     utils/seed.js          Idempotent demo seed (npm run seed)
     utils/matchingEngine.js  Weighted skill-match scoring
+    scripts/dev-mongo.js   In-memory MongoDB for local demos (npm run mongo)
     scripts/smoke-test.js  Behavioral test: boots real server, asserts 36 checks
   client/
     src/App.jsx            Landing page + role dashboards
@@ -29,6 +30,9 @@ Setu connects students with industry internships using **explainable, skill-base
 
 ## Run locally
 
+**One-click option:** double-click `start-setu.bat` — it installs dependencies if missing, creates `.env` from the template, starts all three services (in-memory MongoDB, backend, client) in their own windows, and opens the browser at `http://localhost:5175`. No MongoDB installation needed.
+
+**Manual option:**
 Requirements: Node 18+, and a MongoDB instance (local `mongod` or a free [Atlas](https://www.mongodb.com/atlas) cluster).
 
 ```bash
