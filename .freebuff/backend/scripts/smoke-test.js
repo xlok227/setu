@@ -107,12 +107,30 @@ async function api(method, urlPath, { token, body } = {}) {
   assert(industryLogin.status === 200 && industryLogin.json.user?.role === 'industry', 'industry demo login works', industryLogin.json?.user);
   const industryToken = industryLogin.json?.token;
 
-  // --- Seeded profile + REAL user data in user_id ---
+  // --- Seeded profile: starts EMPTY by design; real user data in user_id ---
   const me = await api('GET', '/api/assessment/me', { token: studentToken });
-  assert(me.status === 200 && Array.isArray(me.json?.skills) && me.json.skills.length === 7, 'seeded student profile has 7 skills', me.json?.skills?.length);
+  assert(me.status === 200 && Array.isArray(me.json?.skills) && me.json.skills.length === 0, 'seeded student profile starts with 0 skills', me.json?.skills?.length);
   assert(me.json?.user_id?.name === 'Student Demo' && me.json?.user_id?.email === 'student@setu.dev', 'profile user_id comes from real DB user (not hardcoded)', me.json?.user_id);
 
-  // --- Matches on SEEDED profile: exact deterministic math ---
+  // --- Matches with empty profile: all zero, postings still listed ---
+  const matches0 = await api('GET', '/api/postings/matches', { token: studentToken });
+  const m0 = matches0.json || [];
+  assert(matches0.status === 200 && m0.length === 2, 'empty profile still lists 2 open postings', m0.length);
+  assert(m0.every((x) => x.final_score === 0 && x.match_score === 0), 'empty profile scores all matches 0', m0.map((x) => x.final_score));
+
+  // --- Student saves their full assessment; exact deterministic math ---
+  const seededSkills = [
+    { skill_name: 'React', proficiency: 78 },
+    { skill_name: 'Node.js', proficiency: 64 },
+    { skill_name: 'JavaScript', proficiency: 82 },
+    { skill_name: 'SQL', proficiency: 71 },
+    { skill_name: 'Python', proficiency: 68 },
+    { skill_name: 'Communication', proficiency: 88 },
+    { skill_name: 'Design', proficiency: 74 },
+  ];
+  const seedSave = await api('POST', '/api/assessment/submit', { token: studentToken, body: { skills: seededSkills } });
+  assert(seedSave.status === 200 && seedSave.json?.profile?.skills?.length === 7, 'saving full 7-skill assessment works', seedSave.json?.profile?.skills?.length);
+
   // Frontend Intern: (3*78 + 3*82 + 2*74) / 8 = 628/8 = 78.5, coverage 3/3 = 1
   // Data & Insights: (3*68 + 3*71 + 2*88) / 8 = 593/8 = 74.13, coverage 1
   const matches1 = await api('GET', '/api/postings/matches', { token: studentToken });

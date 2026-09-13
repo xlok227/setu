@@ -39,20 +39,10 @@ async function seedDemoData() {
     { upsert: true, returnDocument: 'after' }
   );
 
-  // --- Student profile ---
-  const skills = [
-    { skill_name: 'React', proficiency: 78 },
-    { skill_name: 'Node.js', proficiency: 64 },
-    { skill_name: 'JavaScript', proficiency: 82 },
-    { skill_name: 'SQL', proficiency: 71 },
-    { skill_name: 'Python', proficiency: 68 },
-    { skill_name: 'Communication', proficiency: 88 },
-    { skill_name: 'Design', proficiency: 74 },
-  ];
-
+  // --- Student profile (starts empty; students fill it via the assessment) ---
   await StudentProfile.updateOne(
     { user_id: student._id },
-    { $setOnInsert: { user_id: student._id, skills, assessment_history: [] } },
+    { $setOnInsert: { user_id: student._id, skills: [], assessment_history: [] } },
     { upsert: true }
   );
 

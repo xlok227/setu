@@ -12,22 +12,12 @@ const { seedDemoData } = require('./utils/seed');
 const app = express();
 
 app.use(helmet());
-
-// CORS: allow-list from CORS_ORIGINS (comma-separated). Falls back to
-// reflecting any origin when unset, which keeps local dev simple.
-const allowedOrigins = (process.env.CORS_ORIGINS || '')
-  .split(',')
-  .map((s) => s.trim())
-  .filter(Boolean);
-
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin || '*');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Origin, X-Requested-With');
-  }
+  res.header('Access-Control-Allow-Origin', origin || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Origin, X-Requested-With');
 
   if (req.method === 'OPTIONS') {
     return res.sendStatus(204);
