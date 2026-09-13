@@ -699,17 +699,16 @@ function App() {
                       }}
                     />
                     <input
+                      className="skill-range"
                       type="range"
                       min="0"
                       max="100"
                       value={skill.proficiency}
+                      style={{ '--fill': `${skill.proficiency}%` }}
                       aria-label={`${skill.skill_name} proficiency`}
                       onChange={(event) => handleSkillChange(skill.skill_name, event.target.value)}
                     />
-                    <div className="skill-strength">
-                      <div className="skill-bar"><span style={{ width: `${skill.proficiency}%` }} /></div>
-                      <strong>{skill.proficiency}%</strong>
-                    </div>
+                    <strong>{skill.proficiency}%</strong>
                   </div>
                 ))}
                 {skills.length === 0 && !boardLoading && (

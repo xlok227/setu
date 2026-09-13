@@ -73,6 +73,3 @@ npm test                    # 36 assertions, exits non-zero on failure
 | POST | `/api/postings/create` | Industry | Create posting |
 | GET | `/api/postings/matches` | Student | Ranked matches with score math |
 
-## Deploying
-
-`render.yaml` is included for Render (backend web service). The client builds to static files (`npm run build` → `dist/`) and deploys to Vercel/Netlify/Render — point `VITE_API_BASE` at the backend URL and set `CORS_ORIGINS` on the backend accordingly.
